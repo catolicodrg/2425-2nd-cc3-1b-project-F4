@@ -27,7 +27,6 @@ class User {
     public void deleteRecipe(int recipeId) {}
     
     public Recipe viewRecipe(int recipeId) {
-        return recipes.stream().filter(r -> r.id == recipeId).findFirst().orElse(null);
     }
 }
 
