@@ -1,9 +1,12 @@
-public class Category extends RecipeItem {
-    public Category(int id, String name) {
+public class Ingredient extends RecipeItem {
+    private String quantity;
+
+    public Ingredient(int id, String name, String quantity) {
         super(id, name);
+        this.quantity = quantity;
     }
 
-    public String getCategoryName() {
-        return name;
+    public String getDetails() {
+        return name + " (" + quantity + ")";
     }
 }
