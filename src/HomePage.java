@@ -16,12 +16,30 @@ public class HomePage extends JFrame {
 
         // === NAVIGATION BAR ===
         JPanel navBar = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JButton homeButton = new JButton("Home");
+        homeButton.setEnabled(false); // Disable since we're on HomePage
+        homeButton.addActionListener(e -> goToHomePage());
+
+        JButton categoriesButton = new JButton("Categories");
+        categoriesButton.addActionListener(e -> goToCategoryPage()); // Navigate to Category Page
+
+        JButton newButton = new JButton("New");
+        newButton.addActionListener(e -> showNewPage()); // Show New Page functionality
+
+        JButton searchButton = new JButton("🔍");
+        searchButton.addActionListener(e -> searchRecipes()); // Search Recipes functionality
+
+        JButton userButton = new JButton("User");
+        userButton.addActionListener(e -> goToUserPage()); // Go to User Page
+
         navBar.add(new JLabel("🍲 Recipes"));
-        navBar.add(new JButton("Home"));
-        navBar.add(new JButton("Categories"));
-        navBar.add(new JButton("New"));
-        navBar.add(new JButton("🔍"));
-        navBar.add(new JButton("User"));
+        navBar.add(homeButton);
+        navBar.add(categoriesButton);
+        navBar.add(newButton);
+        navBar.add(searchButton);
+        navBar.add(userButton);
+
         add(navBar, BorderLayout.NORTH);
 
         // === FEATURED PANEL ===
@@ -66,6 +84,28 @@ public class HomePage extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         setVisible(true);
+    }
+
+    // Navigation Actions
+    private void goToHomePage() {
+        JOptionPane.showMessageDialog(this, "Already on Home Page!");
+    }
+
+    private void goToCategoryPage() {
+        dispose(); // Close the current page
+        new CategoryPage(); // Open the Category Page
+    }
+
+    private void showNewPage() {
+        JOptionPane.showMessageDialog(this, "New Page Coming Soon!");
+    }
+
+    private void searchRecipes() {
+        JOptionPane.showMessageDialog(this, "Search Functionality Coming Soon!");
+    }
+
+    private void goToUserPage() {
+        JOptionPane.showMessageDialog(this, "User Page Coming Soon!");
     }
 
     public static void main(String[] args) {

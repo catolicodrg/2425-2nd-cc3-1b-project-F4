@@ -4,88 +4,73 @@ import java.awt.*;
 public class CategoryPage extends JFrame {
 
     public CategoryPage() {
-        // Setup frame for Category page
-        setTitle("Categories");
-        setSize(1280, 800);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only the Category page, not the whole app
+        setTitle("Category Page");
+        setSize(1000, 700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // === NAVIGATION BAR ===
         JPanel navBar = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        navBar.add(new JLabel("📋 THE MENU"));
 
-        // Create and add buttons with respective action commands for this page's navbar
-        JButton homeButton = new JButton("Home");
-        homeButton.addActionListener(e -> goToHomePage());
+        JButton homeBtn = new JButton("Home");
+        homeBtn.addActionListener(e -> {
+            dispose();
+            new HomePage();
+        });
 
-        JButton categoriesButton = new JButton("Categories");
-        categoriesButton.setEnabled(false); // Disable the Categories button on the Categories page
+        navBar.add(homeBtn);
+        navBar.add(new JButton("Categories"));
+        navBar.add(new JButton("New"));
+        navBar.add(new JButton("🔍"));
+        navBar.add(new JButton("User"));
 
-        JButton newButton = new JButton("New");
-        newButton.addActionListener(e -> goToNewPage());
-
-        JButton searchButton = new JButton("🔍");
-        searchButton.addActionListener(e -> searchProducts());
-
-        JButton userButton = new JButton("User");
-        userButton.addActionListener(e -> goToUserPage());
-
-        // Add buttons to the navigation bar
-        navBar.add(homeButton);
-        navBar.add(categoriesButton);
-        navBar.add(newButton);
-        navBar.add(searchButton);
-        navBar.add(userButton);
-
-        // Add navigation bar to the frame
         add(navBar, BorderLayout.NORTH);
 
-        // === CATEGORY CONTENT ===
-        JPanel categoryPanel = new JPanel();
-        categoryPanel.setLayout(new GridLayout(3, 2, 10, 10)); // Example layout (3 rows, 2 columns)
+        // === MAIN PANEL ===
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Add example category buttons (can be dynamic in future)
-        for (int i = 1; i <= 6; i++) {
-            // Make `i` final by using a final variable
-            final int categoryId = i; // Final copy of i
+        mainPanel.add(createCategorySection("Hot Dishes"));
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        mainPanel.add(createCategorySection("Cold Dishes"));
 
-            JButton categoryButton = new JButton("Category " + i);
-            categoryButton.addActionListener(e -> viewCategoryDetails(categoryId)); // Pass the final variable
-            categoryPanel.add(categoryButton);
-        }
-
-        // Add the category panel to the center of the frame
-        add(categoryPanel, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane, BorderLayout.CENTER);
 
         setVisible(true);
     }
 
-    // Go back to the home page
-    private void goToHomePage() {
-        dispose(); // Close the current Category page
-        new Homepagelayout(); // Open HomePage
-    }
+    private JPanel createCategorySection(String title) {
+        JPanel section = new JPanel();
+        section.setLayout(new BorderLayout());
 
-    // Open the New page (this is just a placeholder)
-    private void goToNewPage() {
-        JOptionPane.showMessageDialog(this, "New Page Coming Soon!");
-    }
+        JLabel label = new JLabel(title);
+        label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    // Trigger search functionality (this is just a placeholder)
-    private void searchProducts() {
-        JOptionPane.showMessageDialog(this, "Search Functionality Coming Soon!");
-    }
+        JPanel grid = new JPanel(new GridLayout(1, 4, 10, 10));
+        grid.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-    // Navigate to the User page (this is just a placeholder)
-    private void goToUserPage() {
-        JOptionPane.showMessageDialog(this, "User Page Coming Soon!");
-    }
+        for (int i = 1; i <= 4; i++) {
+            JPanel card = new JPanel();
+            card.setLayout(new BorderLayout());
 
-    // View category details (for now just display category number)
-    private void viewCategoryDetails(int categoryId) {
-        JOptionPane.showMessageDialog(this, "Viewing details for Category " + categoryId);
-    }
+            JLabel image = new JLabel(" ", SwingConstants.CENTER);
+            image.setPreferredSize(new Dimension(150, 100));
+            image.setOpaque(true);
+            image.setBackground(Color.LIGHT_GRAY);
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new CategoryPage());
+            JLabel name = new JLabel("Dish " + i, SwingConstants.CENTER);
+
+            card.add(image, BorderLayout.CENTER);
+            card.add(name, BorderLayout.SOUTH);
+            grid.add(card);
+        }
+
+        section.add(label, BorderLayout.NORTH);
+        section.add(grid, BorderLayout.CENTER);
+        return section;
     }
 }
