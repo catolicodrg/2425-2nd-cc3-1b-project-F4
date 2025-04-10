@@ -1,10 +1,12 @@
+import java.io.Serializable;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L; 
     private int id;
     private String username;
     private String password;
-    private List<Recipe> recipes;
+    private transient List<Recipe> recipes; 
 
     public User(int id, String username, String password) {
         this.id = id;
@@ -17,7 +19,7 @@ public class User {
     }
 
     public void logout() {
-        System.out.println("User logged out.");
+        System.out.println("User  logged out.");
     }
 
     public boolean register(String username, String password) {
