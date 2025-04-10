@@ -1,36 +1,29 @@
+// Product.java
 import java.util.List;
 
-class Recipe extends RecipeItem {
+public class Recipe extends RecipeItem {
     private String description;
-    private List<Ingredient> ingredients;
     private List<String> steps;
-    private Category category;
-    private List<Integer> ratings;
-    
-    public void addIngredient(Ingredient ingredient) {
-        ingredients.add(ingredient);
-    }
-    
-    public void removeIngredient(Ingredient ingredient) {
-        ingredients.remove(ingredient);
-    }
-    
-    public void editRecipe(String name, String description, List<String> steps) {
-        this.name = name;
+
+    public Recipe(int id, String name, String description, List<String> steps) {
+        super(id, name);
         this.description = description;
         this.steps = steps;
     }
-    
-    public void displayRecipe() {
-        System.out.println("Recipe: " + name);
+
+    public String getDescription() {
+        return description;
     }
-    
-    public void rateRecipe(int rating) {
-        ratings.add(rating);
+
+    public void setDescription(String description) {
+        this.description = description;
     }
-    
-    public float getAverageRating() {
-        return (float) ratings.stream().mapToInt(i -> i).average().orElse(0);
+
+    public List<String> getSteps() {
+        return steps;
     }
-    
+
+    public void setSteps(List<String> steps) {
+        this.steps = steps;
+    }
 }

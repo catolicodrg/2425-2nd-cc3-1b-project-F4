@@ -1,83 +1,106 @@
 import javax.swing.*;
 import java.awt.*;
- //size of the frame
-public class frame extends JFrame {
-    public frame() {
-        setTitle("Recipes");
-        setSize(1280,1024);
+import java.util.List;
+
+public class Homepagelayout extends JFrame {
+    private RecipeDataBase recipeDataBase;
+
+    public Homepagelayout() {
+        recipeDataBase = new RecipeDataBase(); // Create a new instance of ProductDatabase
+
+        // Initialize frame
+        setTitle("Product App Homepage");
+        setSize(1280, 800);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Nav shi
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        topPanel.add(new JLabel("Recipes"));
-        topPanel.add(new JButton("Home"));
-        topPanel.add(new JButton("Categories"));
-        topPanel.add(new JButton("New"));
-        topPanel.add(new JButton("🔍"));
-        topPanel.add(new JButton("User"));
+        // === NAVIGATION BAR ===
+        JPanel navBar = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        // panel for featured
+        JButton homeButton = new JButton("Home");
+        homeButton.setEnabled(false); // Disable since we're on HomePage
+
+        JButton categoriesButton = new JButton("Categories");
+        categoriesButton.addActionListener(e -> goToCategoryPage());
+
+        JButton newButton = new JButton("New");
+        newButton.addActionListener(e -> showNewPage());
+
+        JButton searchButton = new JButton("🔍");
+        searchButton.addActionListener(e -> searchProducts());
+
+        JButton userButton = new JButton("User");
+        userButton.addActionListener(e -> goToUserPage());
+
+        navBar.add(new JLabel("🛒 Products"));
+        navBar.add(homeButton);
+        navBar.add(categoriesButton);
+        navBar.add(newButton);
+        navBar.add(searchButton);
+        navBar.add(userButton);
+
+        add(navBar, BorderLayout.NORTH);
+
+        // === FEATURED PANEL ===
         JPanel featuredPanel = new JPanel(new BorderLayout());
+        featuredPanel.setBorder(BorderFactory.createTitledBorder("Featured Product"));
 
-        // image test
-        ImageIcon tinolaImage = new ImageIcon("Onedrive/Desktop/2nd_Semester_UC/GROUP_WORKS/CC3_F4_STUFF/images/tinola.jpg");// idk why it no work
-        if (tinolaImage.getIconWidth() == -1) {
-            System.out.println("Error: Image not found. Check file path.");
-        } else {
-            Image img = tinolaImage.getImage().getScaledInstance(400, 200, Image.SCALE_SMOOTH);
-            tinolaImage = new ImageIcon(img);
+        JLabel featuredPlaceholder = new JLabel("Insert Image", SwingConstants.CENTER);
+        featuredPlaceholder.setPreferredSize(new Dimension(600, 300));
+        featuredPlaceholder.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+        featuredPanel.add(featuredPlaceholder, BorderLayout.CENTER);
+        featuredPanel.add(new JLabel("Featured Product", SwingConstants.CENTER), BorderLayout.SOUTH);
+
+        // === QUICK PRODUCTS PANEL ===
+        JPanel quickProductsPanel = new JPanel(new GridLayout(1, 4, 10, 10));
+        quickProductsPanel.setBorder(BorderFactory.createTitledBorder("Quick Products"));
+
+        List<Recipe> recipes = recipeDataBase.getAllProducts();
+        for (Recipe product : recipes) {
+            JButton productButton = new JButton(product.getName());
+            productButton.setPreferredSize(new Dimension(100, 100));
+            productButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            productButton.addActionListener(e -> new RecipeDetailFrame(product));
+            quickProductsPanel.add(productButton);
         }
 
-        JLabel featuredImage = new JLabel(tinolaImage);
-        featuredImage.setPreferredSize(new Dimension(400, 200));
-        featuredImage.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        // === CENTER PANEL (stacked vertically) ===
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        centerPanel.add(featuredPanel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerPanel.add(quickProductsPanel);
 
-        featuredPanel.add(featuredImage, BorderLayout.CENTER);
-        featuredPanel.add(new JLabel("Tinola", SwingConstants.CENTER), BorderLayout.SOUTH);
-
-        // Quick dishes
-        JPanel quickDishesPanel = new JPanel(new GridLayout(1, 4, 10, 10));
-        for (int i = 0; i > 4; i++) {
-            JPanel dishPanel = new JPanel(new BorderLayout());
-            JLabel imageLabel = new JLabel("Insert Image", SwingConstants.CENTER);
-            imageLabel.setPreferredSize(new Dimension(100, 100));
-            imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            dishPanel.add(imageLabel, BorderLayout.CENTER);
-            dishPanel.add(new JLabel("Dish " + (i + 1), SwingConstants.CENTER), BorderLayout.SOUTH);
-            quickDishesPanel.add(dishPanel);
-        }
-
-        // main panel for all
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(new JLabel("FEATURED", SwingConstants.CENTER), BorderLayout.NORTH);
-        mainPanel.add(featuredPanel, BorderLayout.CENTER);
-
-        // more dishes
-        JPanel bottomPanel = new JPanel(new GridLayout(1, 3, 10, 10));
-        for (int i = 0; i < 3; i++) {
-            JPanel dishPanel = new JPanel(new BorderLayout());
-            JLabel imageLabel = new JLabel("Insert Image", SwingConstants.CENTER);
-            imageLabel.setPreferredSize(new Dimension(100, 100));
-            imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            dishPanel.add(imageLabel, BorderLayout.CENTER);
-            dishPanel.add(new JLabel("Dish " + (i + 5), SwingConstants.CENTER), BorderLayout.SOUTH);
-            bottomPanel.add(dishPanel);
-        }
-
-        // components to the frame
-        add(topPanel, BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.CENTER);
-        add(quickDishesPanel, BorderLayout.SOUTH);
-
-        // container of bottom panel
-        JPanel bottomContainer = new JPanel(new BorderLayout());
-        bottomContainer.add(bottomPanel, BorderLayout.CENTER);
-        add(bottomContainer, BorderLayout.SOUTH);
+        // === SCROLL PANE WRAPPER ===
+        JScrollPane scrollPane = new JScrollPane(centerPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        add(scrollPane, BorderLayout.CENTER);
 
         setVisible(true);
     }
 
+    // Navigation actions
+    private void goToCategoryPage() {
+        dispose();
+        new CategoryPage();
+    }
+
+    private void showNewPage() {
+        JOptionPane.showMessageDialog(this, "New Page Coming Soon!");
+    }
+
+    private void searchProducts() {
+        JOptionPane.showMessageDialog(this, "Search Functionality Coming Soon!");
+    }
+
+    private void goToUserPage() {
+        JOptionPane.showMessageDialog(this, "User Page Coming Soon!");
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new frame());
+        SwingUtilities.invokeLater(() -> new Homepagelayout());
     }
 }
