@@ -1,29 +1,31 @@
-// Product.java
 import java.util.List;
 
-public class Recipe extends RecipeItem {
+public class Recipe {
+    private int id;
+    private String name;
     private String description;
-    private List<String> steps;
+    private String imagePath;
+    private List<String> steps; // List to store the steps for the recipe
 
-    public Recipe(int id, String name, String description, List<String> steps) {
-        super(id, name);
+    // Constructor
+    public Recipe(int id, String name, String description, String imagePath, List<String> steps) {
+        this.id = id;
+        this.name = name;
         this.description = description;
-        this.steps = steps;
+        this.imagePath = imagePath;
+        this.steps = steps; // Initialize the steps
     }
 
-    public String getDescription() {
-        return description;
-    }
+    // Getters
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getDescription() { return description; }
+    public String getImagePath() { return imagePath; }
+    public List<String> getSteps() { return steps; } // Add this getter for steps
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<String> getSteps() {
-        return steps;
-    }
-
-    public void setSteps(List<String> steps) {
-        this.steps = steps;
+    // Optionally, you can provide a toString method if needed
+    @Override
+    public String toString() {
+        return name + " (" + description + ")";
     }
 }

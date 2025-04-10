@@ -7,8 +7,13 @@ public class Ingredient {
         this.quantity = quantity;
     }
 
-    public String getName() { return name; }
-    public String getQuantity() { return quantity; }
+    public String getName() { 
+        return name; 
+    }
+
+    public String getQuantity() { 
+        return quantity; 
+    }
 
     @Override
     public String toString() {

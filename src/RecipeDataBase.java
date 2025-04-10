@@ -1,22 +1,43 @@
-// ProductDatabase.java
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-public class RecipeDataBase {
+public class RecipeDatabase {
+
     private List<Recipe> recipes;
 
-    public RecipeDataBase() {
-        this.recipes = new ArrayList<>();
-        // Add some dummy data for testing
-        recipes.add(new Recipe(1, "Product 1", "Description of Product 1", List.of("Step 1", "Step 2")));
-        recipes.add(new Recipe(2, "Product 2", "Description of Product 2", List.of("Step 1", "Step 2")));
+    // Constructor
+    public RecipeDatabase() {
+        recipes = new ArrayList<>();
+        // Add some sample recipes to the database (for testing purposes)
+        List<String> steps1 = List.of("Step 1: Preheat oven", "Step 2: Mix ingredients", "Step 3: Bake for 20 minutes");
+        recipes.add(new Recipe(1, "Chocolate Cake", "A rich chocolate cake.", "chocolate_cake.jpg", steps1));
+
+        List<String> steps2 = List.of("Step 1: Boil pasta", "Step 2: Add sauce", "Step 3: Serve");
+        recipes.add(new Recipe(2, "Pasta", "A simple pasta recipe.", "pasta.jpg", steps2));
     }
 
-    public List<Recipe> getAllProducts() {
+    // Method to get all recipes
+    public List<Recipe> getAllRecipes() {
         return recipes;
     }
 
-    public Recipe getProductById(int id) {
-        return recipes.stream().filter(product -> product.getId() == id).findFirst().orElse(null);
+    // Method to get a specific recipe by ID
+    public Recipe getRecipeById(int id) {
+        for (Recipe recipe : recipes) {
+            if (recipe.getId() == id) {
+                return recipe;
+            }
+        }
+        return null; // If no recipe is found with the given ID
+    }
+
+    // Method to add a new recipe
+    public void addRecipe(Recipe recipe) {
+        recipes.add(recipe);
+    }
+
+    // Method to remove a recipe
+    public void removeRecipe(int id) {
+        recipes.removeIf(recipe -> recipe.getId() == id);
     }
 }
