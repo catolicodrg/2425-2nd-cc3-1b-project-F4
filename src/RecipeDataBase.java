@@ -1,43 +1,48 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeDatabase {
+public class RecipeDatabase implements Serializable {
+    private static final long serialVersionUID = 1L;
 
+    private static RecipeDatabase instance;
     private List<Recipe> recipes;
 
-    // Constructor
-    public RecipeDatabase() {
-        recipes = new ArrayList<>();
-        // Add some sample recipes to the database (for testing purposes)
-        List<String> steps1 = List.of("Step 1: Preheat oven", "Step 2: Mix ingredients", "Step 3: Bake for 20 minutes");
-        recipes.add(new Recipe(1, "Chocolate Cake", "A rich chocolate cake.", "chocolate_cake.jpg", steps1));
+    private static final String FILE_NAME = "recipes.dat"; // File to store recipes
 
-        List<String> steps2 = List.of("Step 1: Boil pasta", "Step 2: Add sauce", "Step 3: Serve");
-        recipes.add(new Recipe(2, "Pasta", "A simple pasta recipe.", "pasta.jpg", steps2));
+    private RecipeDatabase() {
+        recipes = new ArrayList<>();
     }
 
-    // Method to get all recipes
+    public static RecipeDatabase getInstance() {
+        if (instance == null) {
+            instance = loadFromFile();
+        }
+        return instance;
+    }
+
+    public void addRecipe(Recipe recipe) {
+        recipes.add(recipe);
+        saveToFile();
+    }
+
     public List<Recipe> getAllRecipes() {
         return recipes;
     }
 
-    // Method to get a specific recipe by ID
-    public Recipe getRecipeById(int id) {
-        for (Recipe recipe : recipes) {
-            if (recipe.getId() == id) {
-                return recipe;
-            }
+    private static void saveToFile() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+            out.writeObject(instance);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null; // If no recipe is found with the given ID
     }
 
-    // Method to add a new recipe
-    public void addRecipe(Recipe recipe) {
-        recipes.add(recipe);
-    }
-
-    // Method to remove a recipe
-    public void removeRecipe(int id) {
-        recipes.removeIf(recipe -> recipe.getId() == id);
+    private static RecipeDatabase loadFromFile() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+            return (RecipeDatabase) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            return new RecipeDatabase(); // Return a new database if no file is found
+        }
     }
 }

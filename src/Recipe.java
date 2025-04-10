@@ -1,31 +1,35 @@
-import java.util.List;
+import java.io.Serializable;
 
-public class Recipe {
-    private int id;
+public class Recipe implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String name;
     private String description;
+    private String steps;
     private String imagePath;
-    private List<String> steps; // List to store the steps for the recipe
 
     // Constructor
-    public Recipe(int id, String name, String description, String imagePath, List<String> steps) {
-        this.id = id;
+    public Recipe(String name, String description, String steps, String imagePath) {
         this.name = name;
         this.description = description;
+        this.steps = steps;
         this.imagePath = imagePath;
-        this.steps = steps; // Initialize the steps
     }
 
     // Getters
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public String getDescription() { return description; }
-    public String getImagePath() { return imagePath; }
-    public List<String> getSteps() { return steps; } // Add this getter for steps
+    public String getName() {
+        return name;
+    }
 
-    // Optionally, you can provide a toString method if needed
-    @Override
-    public String toString() {
-        return name + " (" + description + ")";
+    public String getDescription() {
+        return description;
+    }
+
+    public String getSteps() {
+        return steps;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

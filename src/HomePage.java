@@ -6,7 +6,7 @@ public class HomePage extends JFrame {
     private RecipeDatabase recipeDatabase;
 
     public HomePage() {
-        recipeDatabase = new RecipeDatabase(); // Create a new instance of RecipeDatabase
+        recipeDatabase = RecipeDatabase.getInstance(); // Get the instance of RecipeDatabase
 
         // Initialize frame
         setTitle("Recipe App Homepage");
@@ -16,30 +16,32 @@ public class HomePage extends JFrame {
 
         // === NAVIGATION BAR ===
         JPanel navBar = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
+        
+        // Creating navigation buttons
         JButton homeButton = new JButton("Home");
-        homeButton.setEnabled(false); // Disable since we're on HomePage
-        homeButton.addActionListener(e -> goToHomePage());
+        homeButton.setEnabled(false); // Disable since we are on HomePage
 
         JButton categoriesButton = new JButton("Categories");
-        categoriesButton.addActionListener(e -> goToCategoryPage()); // Navigate to Category Page
+        categoriesButton.addActionListener(e -> goToCategoryPage());
 
         JButton newButton = new JButton("New");
-        newButton.addActionListener(e -> showNewPage()); // Show New Page functionality
+        newButton.addActionListener(e -> goToAddRecipePage());
 
         JButton searchButton = new JButton("🔍");
-        searchButton.addActionListener(e -> searchRecipes()); // Search Recipes functionality
+        searchButton.addActionListener(e -> searchRecipes());
 
         JButton userButton = new JButton("User");
-        userButton.addActionListener(e -> goToUserPage()); // Go to User Page
+        userButton.addActionListener(e -> goToUserPage());
 
+        // Adding buttons to the navigation bar
         navBar.add(new JLabel("🍲 Recipes"));
         navBar.add(homeButton);
         navBar.add(categoriesButton);
         navBar.add(newButton);
         navBar.add(searchButton);
         navBar.add(userButton);
-
+        
+        // Adding the navbar to the top
         add(navBar, BorderLayout.NORTH);
 
         // === FEATURED PANEL ===
@@ -86,24 +88,24 @@ public class HomePage extends JFrame {
         setVisible(true);
     }
 
-    // Navigation Actions
-    private void goToHomePage() {
-        JOptionPane.showMessageDialog(this, "Already on Home Page!");
-    }
-
+    // Navigate to Categories page
     private void goToCategoryPage() {
-        dispose(); // Close the current page
-        new CategoryPage(); // Open the Category Page
+        dispose();
+        new CategoryPage(); // Assuming CategoryPage class exists
     }
 
-    private void showNewPage() {
-        JOptionPane.showMessageDialog(this, "New Page Coming Soon!");
+    // Navigate to Add Recipe page
+    private void goToAddRecipePage() {
+        dispose();
+        new AddRecipePage(); // Assuming AddRecipePage class exists
     }
 
+    // Perform recipe search (future implementation)
     private void searchRecipes() {
         JOptionPane.showMessageDialog(this, "Search Functionality Coming Soon!");
     }
 
+    // Navigate to User page
     private void goToUserPage() {
         JOptionPane.showMessageDialog(this, "User Page Coming Soon!");
     }

@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class RecipeDetailPage extends JFrame {
     private Recipe recipe;
@@ -8,30 +7,34 @@ public class RecipeDetailPage extends JFrame {
     public RecipeDetailPage(Recipe recipe) {
         this.recipe = recipe;
 
-        setTitle(recipe.getName() + " - Details");
+        // Initialize frame
+        setTitle(recipe.getName());
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         setLayout(new BorderLayout());
 
-        JLabel recipeNameLabel = new JLabel(recipe.getName(), SwingConstants.CENTER);
-        recipeNameLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        // === RECIPE DETAILS PANEL ===
+        JPanel detailPanel = new JPanel();
+        detailPanel.setLayout(new BoxLayout(detailPanel, BoxLayout.Y_AXIS));
 
-        JLabel recipeDescriptionLabel = new JLabel("<html><div style='width: 500px;'>" + recipe.getDescription() + "</div></html>", SwingConstants.CENTER);
+        JLabel nameLabel = new JLabel("Recipe: " + recipe.getName());
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
-        JTextArea recipeStepsArea = new JTextArea();
-        recipeStepsArea.setEditable(false);
-        StringBuilder stepsText = new StringBuilder();
-        List<String> steps = recipe.getSteps(); // This will need a method to get steps
-        for (String step : steps) {
-            stepsText.append(step).append("\n");
+        JLabel descriptionLabel = new JLabel("Description: " + recipe.getDescription());
+        JLabel stepsLabel = new JLabel("Steps: " + recipe.getSteps());
+
+        detailPanel.add(nameLabel);
+        detailPanel.add(descriptionLabel);
+        detailPanel.add(stepsLabel);
+
+        // === IMAGE PANEL ===
+        if (recipe.getImagePath() != null) {
+            ImageIcon imageIcon = new ImageIcon(recipe.getImagePath());
+            JLabel imageLabel = new JLabel(imageIcon);
+            detailPanel.add(imageLabel);
         }
-        recipeStepsArea.setText(stepsText.toString());
 
-        add(recipeNameLabel, BorderLayout.NORTH);
-        add(recipeDescriptionLabel, BorderLayout.CENTER);
-        add(new JScrollPane(recipeStepsArea), BorderLayout.SOUTH);
-
+        add(detailPanel, BorderLayout.CENTER);
         setVisible(true);
     }
 }
