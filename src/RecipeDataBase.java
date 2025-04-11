@@ -30,6 +30,12 @@ public class RecipeDatabase implements Serializable {
         return recipes;
     }
 
+    // Method to delete a recipe from the database
+    public void deleteRecipe(Recipe recipe) {
+        recipes.remove(recipe);
+        saveToFile(); // Save the updated list after deletion
+    }
+
     private static void saveToFile() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
             out.writeObject(instance);
